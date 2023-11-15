@@ -9,13 +9,14 @@ byte midiBotao[nBotao] = {20, 21, 22, 23};
 
 
 #define nBotaoFunc 2
-byte botaoFuncPin[nBotaoFunc] = {2,5};
+byte botaoFuncPin[nBotaoFunc] = {5,2};
 bool botaoFuncEstado[nBotaoFunc];
 bool botaoFuncEstadoP[nBotaoFunc];
-//unsigned long botaoTempo[nBotaoFunc];
-// byte botaoFlag[nBotaoFunc] = {1,1,1,1};
-// bool noteOnFlag[nBotaoFunc] = {false};
+unsigned long botaoFuncTempo[nBotaoFunc];
+byte botaoFuncFlag[nBotaoFunc] = {1,1};
+bool noteOnFuncFlag[nBotaoFunc] = {false, false};
 
+bool flagBancoPreset = false;
 
 
 #define dataPin 10
@@ -43,6 +44,17 @@ const byte numAnod[10] = {
    0b10000000,
    0b10001100,
  };
+ const byte letraAnod[5] = {
+  0b10001000,
+  0b11100000,
+  0b10110001,
+  0b11000010,
+  0b10110000
+
+
+
+ };
 
  #define battPin A2
- unsigned long battEstado;
+ byte battVida;
+ unsigned long battTempo;

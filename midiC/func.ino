@@ -15,3 +15,9 @@ void mandarPC_bt(byte midiNota, byte midiForca){
   bluetSerial.write(midiNota);        // passa o byte de data da nota midi desejada
   bluetSerial.write(midiForca);      // passa o byte de valor da força desejada ( 0 À 127
 };
+void limparLeds(){
+  for (byte i = 3; i < 8; i++){
+    bitWrite(ledsByte, i, 0);
+  };
+  ledsAtualizar();
+}

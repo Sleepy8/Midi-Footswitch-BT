@@ -20,8 +20,13 @@ void setup() {
   for (byte i = 0; i < nBotao ; i++) {
     pinMode(botaoPin[i], INPUT_PULLUP);
   }
-  anodoByte = numAnod[4];
-  catodoByte = numAnod[8];
+   for (byte i = 0; i < nBotaoFunc ; i++) {
+    pinMode(botaoFuncPin[i], INPUT_PULLUP);
+  }
+  anodoByte = letraAnod[0];
+  catodoByte = numAnod[0];
+  bitWrite(anodoByte,7, 1);             
+  bitWrite(catodoByte,7, 0);
   ledsAtualizar();
 
 
@@ -41,6 +46,32 @@ void loop() {
   // battEstado = analogRead(battPin);
   // Serial.println(battEstado);
   // delay(1000);
+  
+  // ---------- bateria ----
+
+  if( millis() - battTempo >= 1000){
+  battVida = map(analogRead(battPin), 614, 859, 0, 100 );
+   if(battVida >= 0 && battVida <= 25){
+     bitWrite(ledsByte, 0, 0);
+     bitWrite(ledsByte, 1, 0);
+     bitWrite(ledsByte, 2, 1);
+     ledsAtualizar();
+   }else if(battVida > 25 && battVida <=  65){
+     bitWrite(ledsByte, 0, 0);
+     bitWrite(ledsByte, 1, 1);
+     bitWrite(ledsByte, 2, 0);
+     ledsAtualizar();
+   }else if(battVida > 65){
+     bitWrite(ledsByte, 0, 1);
+     bitWrite(ledsByte, 1, 0);
+     bitWrite(ledsByte, 2, 0);
+     ledsAtualizar();
+  };
+   battTempo = millis();
+   Serial.println(battVida);
+
+  };
+
 
 
   // ---- botoes ---
@@ -98,10 +129,34 @@ void loop() {
   }
   // ----------------
   // ----------- botoes func ----------
-  for (byte i = 0; i < nBotaoFunc ; i++){
+  for(byte i = 0; i < nBotaoFunc; i++){
     botaoFuncEstado[i] = digitalRead(botaoFuncPin[i]);
+      if(millis() - botaoFuncTempo[i] > 75){
+        if(botaoFuncEstado[i] == 0 && botaoFuncEstadoP[i] == 1){
+          botaoFuncTempo[i] = millis();
+          if(botaoFuncEstado[0] == 0 && botaoFuncEstado[1] == 0){ // se os dois botoes func forem pressionados ao mesmo tempo
+            flagBancoPreset = !flagBancoPreset;
+            if(flagBancoPreset == false){
+              bitWrite(anodoByte,7, 1);
+              bitWrite(catodoByte,7, 0);
+              ledsAtualizar();
+            }else{
+              bitWrite(anodoByte,7, 0);
+              bitWrite(catodoByte,7, 1);
+              ledsAtualizar();
+            }
+
+          }
+          if(botaoFuncEstado[i] == 0 && botaoFuncEstadoP[i] == 1 && flagBancoPreset == false ){
+            
+          }
+        }
+      }
+      botaoFuncEstadoP[i] = botaoFuncEstado[i];
+      
+  }
     
-  };
+ 
 
   
 
