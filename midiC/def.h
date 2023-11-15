@@ -54,6 +54,11 @@ const byte numAnod[10] = {
 
 
  };
+#define nMaxBancos 4
+#define nMaxPreset 3
+byte contadorBanco;
+byte contadorPreset;
+
 
  #define battPin A2
  byte battVida;

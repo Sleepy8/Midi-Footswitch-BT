@@ -25,8 +25,7 @@ void setup() {
   }
   anodoByte = letraAnod[0];
   catodoByte = numAnod[0];
-  bitWrite(anodoByte,7, 1);             
-  bitWrite(catodoByte,7, 0);
+  bancoPresetSelecionado();
   ledsAtualizar();
 
 
@@ -48,9 +47,9 @@ void loop() {
   // delay(1000);
   
   // ---------- bateria ----
-
+battVida = map(analogRead(battPin), 614, 859, 0, 100 );
   if( millis() - battTempo >= 1000){
-  battVida = map(analogRead(battPin), 614, 859, 0, 100 );
+  
    if(battVida >= 0 && battVida <= 25){
      bitWrite(ledsByte, 0, 0);
      bitWrite(ledsByte, 1, 0);
@@ -68,7 +67,7 @@ void loop() {
      ledsAtualizar();
   };
    battTempo = millis();
-   Serial.println(battVida);
+   //Serial.println(battVida);
 
   };
 
@@ -131,24 +130,44 @@ void loop() {
   // ----------- botoes func ----------
   for(byte i = 0; i < nBotaoFunc; i++){
     botaoFuncEstado[i] = digitalRead(botaoFuncPin[i]);
-      if(millis() - botaoFuncTempo[i] > 75){
+      if(millis() - botaoFuncTempo[i] > 100){
         if(botaoFuncEstado[i] == 0 && botaoFuncEstadoP[i] == 1){
           botaoFuncTempo[i] = millis();
           if(botaoFuncEstado[0] == 0 && botaoFuncEstado[1] == 0){ // se os dois botoes func forem pressionados ao mesmo tempo
+            
             flagBancoPreset = !flagBancoPreset;
-            if(flagBancoPreset == false){
-              bitWrite(anodoByte,7, 1);
-              bitWrite(catodoByte,7, 0);
-              ledsAtualizar();
-            }else{
-              bitWrite(anodoByte,7, 0);
-              bitWrite(catodoByte,7, 1);
-              ledsAtualizar();
-            }
+            bancoPresetSelecionado();
+          
 
           }
-          if(botaoFuncEstado[i] == 0 && botaoFuncEstadoP[i] == 1 && flagBancoPreset == false ){
-            
+          if(botaoFuncEstado[1] == 0 && botaoFuncEstadoP[1] == 1 && flagBancoPreset == true ){
+              contadorPreset = contadorPreset -1;
+            if(contadorPreset < 0){
+              contadorPreset = 0;
+            }
+            AtualizarContadorPreset();
+          }
+
+          if(botaoFuncEstado[1] == 0 && botaoFuncEstadoP[1] == 1 && flagBancoPreset == false ){
+              contadorBanco = contadorBanco -1;
+            if(contadorBanco < 0){
+              contadorBanco = 0;
+            }
+            AtualizarContador();
+          }
+          if(botaoFuncEstado[0] == 0 && botaoFuncEstadoP[0] == 1 && flagBancoPreset == false ){
+            contadorBanco = contadorBanco +1;
+            if(contadorBanco > nMaxBancos){
+              contadorBanco = 0;
+            }
+            AtualizarContador();
+          }
+           if(botaoFuncEstado[0] == 0 && botaoFuncEstadoP[0] == 1 && flagBancoPreset == true ){
+            contadorPreset = contadorPreset +1;
+            if(contadorPreset > nMaxPreset){
+              contadorPreset = 0;
+            }
+            AtualizarContadorPreset();
           }
         }
       }
