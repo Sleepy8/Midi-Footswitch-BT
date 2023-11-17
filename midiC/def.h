@@ -21,6 +21,17 @@ unsigned long botaoFuncTempoPressionado;
 
 bool flagBancoPreset = false;
 
+#define nPot 2
+byte potPin[nPot] = {A0, A1};
+byte potMap[nPot];
+byte potMapP[nPot];
+unsigned long potTempo[nPot];
+int potEstado[nPot];
+int potEstadoP[nPot];
+unsigned long  tempoPerdidoPot[nPot];
+byte notaPotCC[nPot] = {100, 120};
+byte notaPotCC_Origi[nPot] = {100, 120};
+
 
 #define dataPin 10
 #define latchPin 16
@@ -32,6 +43,7 @@ byte ledsByte = 0b00000000;
 #define todosBitsUm 0xFF
 
 byte midiChannel = 0x02;
+
 
 
 
@@ -65,4 +77,5 @@ byte contadorPreset;
 
  #define battPin A2
  byte battVida;
+ int battEstado;
  unsigned long battTempo;

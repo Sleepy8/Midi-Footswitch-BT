@@ -35,7 +35,8 @@ void setup() {
 void loop() {
   
   // ---------- bateria ----
-battVida = map(analogRead(battPin), 614, 859, 0, 100 );
+battEstado = analogRead(battPin);
+battVida = map(battEstado, 614, 859, 0, 100 );
   if( millis() - battTempo >= 1000){
   
    if(battVida >= 0 && battVida <= 25){
@@ -164,6 +165,30 @@ battVida = map(analogRead(battPin), 614, 859, 0, 100 );
       botaoFuncEstadoP[i] = botaoFuncEstado[i];
       
   }
+  //0------------------
+  // -------------- pots -------------
+  for(byte i = 0; i < nPot; i ++){
+    potEstado[i] = analogRead(potPin[i]); //le o estado de cada pino e armazena bna varaivel
+    potMap[i] = map(potEstado[i], 0, 1023, 0, 127); // mapeia o valor maximo e minimo para se adequar ao data midi
+    int potVar = abs(potEstado[i] - potEstadoP[i]); // armazena a variação do potenciometro
+    if(potVar > 40){
+      tempoPerdidoPot[i] = millis();
+      
+
+    }
+    potTempo[i] = millis() - tempoPerdidoPot[i];
+    if(potTempo[i] > 300){
+      if (potMap[i] != potMapP[i]){
+          mandarCC_bt(notaPotCC[i], potMap[i], midiChannel);
+          Serial.println(potMap[i]);
+
+      }
+
+    }
+    potEstadoP[i] = potEstado[i];
+    potMapP[i] = potMap[i];
+  }
+
     
  
 
