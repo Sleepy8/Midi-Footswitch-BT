@@ -5,8 +5,8 @@ void ledsAtualizar() {
   shiftOut(dataPin, clockPin, LSBFIRST, ledsByte);                  // mesma logica para atualizar os leds do chassi
   digitalWrite(latchPin, HIGH);                                     // deixa o pino latch com estado logico alto para aplicar as mudanças
 }
-void mandarCC_bt(byte midiNota, byte midiForca) {
-  bluetSerial.write(0xB0);       // passa o byte de status midi como Control Change no canal 0
+void mandarCC_bt(byte midiNota, byte midiForca, byte midiCanal) {
+  bluetSerial.write(0xB0 + midiCanal);       // passa o byte de status midi como Control Change no canal 0
   bluetSerial.write(midiNota);   // passa o byte de data da nota midi desejada
   bluetSerial.write(midiForca);  // passa o byte de valor da força desejada ( 0 À 127
 };
@@ -27,30 +27,49 @@ void AtualizarContador() {
       catodoByte = numAnod[0];
       bancoPresetSelecionado();
       ledsAtualizar();
+      for(byte i = 0; i < nBotao; i++){
+        midiBotaoCC[i] = midiBotaoCC_Origi[i] + 0;    // aumenta a nota CC botao em 1...
+      }
       break;
     case 1:
       catodoByte = numAnod[1];
       bancoPresetSelecionado();
       ledsAtualizar();
+      for(byte i = 0; i < nBotao; i++){
+        midiBotaoCC[i] = midiBotaoCC_Origi[i] + 1;
+      }
       break;
     case 2:
       catodoByte = numAnod[2];
       bancoPresetSelecionado();
       ledsAtualizar();
+      for(byte i = 0; i < nBotao; i++){
+        midiBotaoCC[i] = midiBotaoCC_Origi[i] + 2;
+      }
       break;
     case 3:
       catodoByte = numAnod[3];
       bancoPresetSelecionado();
       ledsAtualizar();
+      for(byte i = 0; i < nBotao; i++){
+        midiBotaoCC[i] = midiBotaoCC_Origi[i] + 3;
+      }
       break;
     case 4:
       catodoByte = numAnod[4];
       bancoPresetSelecionado();
       ledsAtualizar();
+      for(byte i = 0; i < nBotao; i++){
+        midiBotaoCC[i] = midiBotaoCC_Origi[i] + 4;
+      }
       break;
+    case 5: 
       catodoByte = numAnod[5];
       bancoPresetSelecionado();
       ledsAtualizar();
+      for(byte i = 0; i < nBotao; i++){
+        midiBotaoCC[i] = midiBotaoCC_Origi[i] + 5;
+      }
       break;
   };
 }
@@ -88,13 +107,15 @@ void AtualizarContadorPreset() {
   };
 }
 void bancoPresetSelecionado() {
-  if (flagBancoPreset == false) {
+  if (flagBancoPreset == false) { //modo banco
     bitWrite(anodoByte, 7, 1);
     bitWrite(catodoByte, 7, 0);
+    
     ledsAtualizar();
-  } else {
+  } else {                        //modo preset
     bitWrite(anodoByte, 7, 0);
     bitWrite(catodoByte, 7, 1);
+    //catodoByte = numAnod[0];
     ledsAtualizar();
   }
 }

@@ -5,7 +5,8 @@ bool botaoEstadoP[nBotao];
 unsigned long botaoTempo[nBotao];
 byte botaoFlag[nBotao] = {1,1,1,1};
 bool noteOnFlag[nBotao] = {false};
-byte midiBotao[nBotao] = {20, 21, 22, 23};
+byte midiBotaoCC[nBotao] = {20, 30, 40, 50};
+byte midiBotaoCC_Origi[nBotao] = {20, 30, 40, 50};
 
 
 #define nBotaoFunc 2
@@ -15,6 +16,8 @@ bool botaoFuncEstadoP[nBotaoFunc];
 unsigned long botaoFuncTempo[nBotaoFunc];
 byte botaoFuncFlag[nBotaoFunc] = {1,1};
 bool noteOnFuncFlag[nBotaoFunc] = {false, false};
+bool botaoFuncPressionados;
+unsigned long botaoFuncTempoPressionado;
 
 bool flagBancoPreset = false;
 
@@ -28,7 +31,7 @@ byte catodoByte = 0b00000000;
 byte ledsByte = 0b00000000;
 #define todosBitsUm 0xFF
 
-byte midiChannel = 0;
+byte midiChannel = 0x02;
 
 
 

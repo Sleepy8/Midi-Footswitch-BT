@@ -1,5 +1,4 @@
 #include "def.h"
-
 #include <SoftwareSerial.h>
 
 
@@ -34,17 +33,6 @@ void setup() {
 }
 
 void loop() {
-  // for(int i =0; i < 10; i++){
-  //   catodoByte = numAnod[i];
-  //   ledsAtualizar();
-  //   delay(1000); 
-  //   anodoByte = numAnod[i];
-  //   ledsAtualizar();
-  // }
-  // //--- bateria 
-  // battEstado = analogRead(battPin);
-  // Serial.println(battEstado);
-  // delay(1000);
   
   // ---------- bateria ----
 battVida = map(analogRead(battPin), 614, 859, 0, 100 );
@@ -67,7 +55,7 @@ battVida = map(analogRead(battPin), 614, 859, 0, 100 );
      ledsAtualizar();
   };
    battTempo = millis();
-   //Serial.println(battVida);
+   //Serial.println(analogRead(battPin));
 
   };
 
@@ -104,7 +92,7 @@ battVida = map(analogRead(battPin), 614, 859, 0, 100 );
 
      if(botaoFlag[i] == 2 && noteOnFlag[i] == false){  // quando a flag esta em 2 ou 1 faz coisas diferentes
       noteOnFlag[i] = true;
-      mandarCC_bt(midiBotao[i], 127);
+      mandarCC_bt(midiBotaoCC[i], 0, midiChannel);
       
 
       bitWrite(ledsByte, i + 3, 1);
@@ -117,7 +105,7 @@ battVida = map(analogRead(battPin), 614, 859, 0, 100 );
 
     }else if(botaoFlag[i] == 1 && noteOnFlag[i] == true){
       noteOnFlag[i] = false;
-      mandarCC_bt(midiBotao[i], 0);
+      mandarCC_bt(midiBotaoCC[i], 127, midiChannel);
       bitWrite(ledsByte,i + 3, 0);
       ledsAtualizar();
       Serial.print("notaOff:");
@@ -130,21 +118,21 @@ battVida = map(analogRead(battPin), 614, 859, 0, 100 );
   // ----------- botoes func ----------
   for(byte i = 0; i < nBotaoFunc; i++){
     botaoFuncEstado[i] = digitalRead(botaoFuncPin[i]);
-      if(millis() - botaoFuncTempo[i] > 100){
+      if(millis() - botaoFuncTempo[i] > 75){
         if(botaoFuncEstado[i] == 0 && botaoFuncEstadoP[i] == 1){
           botaoFuncTempo[i] = millis();
-          if(botaoFuncEstado[0] == 0 && botaoFuncEstado[1] == 0){ // se os dois botoes func forem pressionados ao mesmo tempo
-            
+          if(botaoFuncEstado[0] == 0 && botaoFuncEstado[1] == 0 ){ // se os dois botoes func forem pressionados ao mesmo tempo
+            botaoFuncPressionados = millis();
             flagBancoPreset = !flagBancoPreset;
             bancoPresetSelecionado();
-          
-
+        
           }
-          if(botaoFuncEstado[1] == 0 && botaoFuncEstadoP[1] == 1 && flagBancoPreset == true ){
+          if(botaoFuncEstado[1] == 0 && botaoFuncEstadoP[1] == 1 && flagBancoPreset == true  ){
               contadorPreset = contadorPreset -1;
             if(contadorPreset < 0){
               contadorPreset = 0;
             }
+            catodoByte = numAnod[0];
             AtualizarContadorPreset();
           }
 
@@ -153,6 +141,7 @@ battVida = map(analogRead(battPin), 614, 859, 0, 100 );
             if(contadorBanco < 0){
               contadorBanco = 0;
             }
+            
             AtualizarContador();
           }
           if(botaoFuncEstado[0] == 0 && botaoFuncEstadoP[0] == 1 && flagBancoPreset == false ){
@@ -167,6 +156,7 @@ battVida = map(analogRead(battPin), 614, 859, 0, 100 );
             if(contadorPreset > nMaxPreset){
               contadorPreset = 0;
             }
+            catodoByte = numAnod[0];
             AtualizarContadorPreset();
           }
         }
