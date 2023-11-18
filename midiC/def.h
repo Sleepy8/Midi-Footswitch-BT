@@ -1,12 +1,47 @@
+#define nMaxBancos 4
+#define nMaxPreset 3
+unsigned int contadorBanco = 0;
+byte contadorPreset;
+byte ledBank[nMaxBancos + 1] = {
+  0b00000000,
+  0b00000000,
+  0b00000000,
+  0b00000000
+};
+
 #define nBotao 4
-byte botaoPin[nBotao] = {6,7,3,4}; // {3,4,6,7};
+const byte botaoPin[nBotao] = {6,7,3,4}; // {3,4,6,7};
 bool botaoEstado[nBotao];
 bool botaoEstadoP[nBotao];
 unsigned long botaoTempo[nBotao];
 byte botaoFlag[nBotao] = {1,1,1,1};
 bool noteOnFlag[nBotao] = {false};
+
 byte midiBotaoCC[nBotao] = {20, 30, 40, 50};
-byte midiBotaoCC_Origi[nBotao] = {20, 30, 40, 50};
+const byte midiBotaoCC_Origi[nBotao] = {20, 30, 40, 50};
+
+byte midiBotaoPC[nBotao] = {20, 30, 40, 50};
+const byte notaBotaoPC_Origi[nBotao] = {20, 30, 40, 50};
+
+byte botaoFlagMatriz[nMaxBancos + 1][nBotao] =
+{
+  {1,1,1,1},
+  {1,1,1,1},
+  {1,1,1,1},
+  {1,1,1,1},
+  {1,1,1,1}
+};
+
+bool noteOnMatriz[nMaxBancos + 1][nBotao] = 
+{
+  
+  {0,0,0,0},
+  {0,0,0,0},
+  {0,0,0,0},
+  {0,0,0,0},
+  {0,0,0,0}
+};
+
 
 
 #define nBotaoFunc 2
@@ -70,16 +105,7 @@ const byte numAnod[10] = {
 
 
  };
-#define nMaxBancos 4
-#define nMaxPreset 3
-unsigned int contadorBanco = 0;
-byte contadorPreset;
-byte ledBank[nMaxBancos + 1] = {
-  0b00000000,
-  0b00000000,
-  0b00000000,
-  0b00000000
-};
+
 
 
  #define battPin A2
