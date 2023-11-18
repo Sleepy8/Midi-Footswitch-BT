@@ -21,6 +21,7 @@ unsigned long botaoFuncTempoPressionado;
 
 bool flagBancoPreset = false;
 
+
 #define nPot 2
 byte potPin[nPot] = {A0, A1};
 byte potMap[nPot];
@@ -71,8 +72,14 @@ const byte numAnod[10] = {
  };
 #define nMaxBancos 4
 #define nMaxPreset 3
-byte contadorBanco;
+unsigned int contadorBanco = 0;
 byte contadorPreset;
+byte ledBank[nMaxBancos + 1] = {
+  0b00000000,
+  0b00000000,
+  0b00000000,
+  0b00000000
+};
 
 
  #define battPin A2

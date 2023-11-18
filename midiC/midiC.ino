@@ -107,7 +107,7 @@ battVida = map(battEstado, 614, 859, 0, 100 );
     }else if(botaoFlag[i] == 1 && noteOnFlag[i] == true){
       noteOnFlag[i] = false;
       mandarCC_bt(midiBotaoCC[i], 127, midiChannel);
-      bitWrite(ledsByte,i + 3, 0);
+      bitWrite(ledsByte,i + 3, 0); //acende o led correspondente ao botao
       ledsAtualizar();
       Serial.print("notaOff:");
       Serial.println(i);
@@ -128,7 +128,7 @@ battVida = map(battEstado, 614, 859, 0, 100 );
             bancoPresetSelecionado();
         
           }
-          if(botaoFuncEstado[1] == 0 && botaoFuncEstadoP[1] == 1 && flagBancoPreset == true  ){
+          if(botaoFuncEstado[1] == 0 && botaoFuncEstadoP[1] == 1 && flagBancoPreset == true  ){ //flagPreset false = banco true = preset
               contadorPreset = contadorPreset -1;
             if(contadorPreset < 0){
               contadorPreset = 0;
@@ -138,21 +138,25 @@ battVida = map(battEstado, 614, 859, 0, 100 );
           }
 
           if(botaoFuncEstado[1] == 0 && botaoFuncEstadoP[1] == 1 && flagBancoPreset == false ){
+               ledBank[contadorBanco] = ledsByte;
+              
               contadorBanco = contadorBanco -1;
-            if(contadorBanco < 0){
-              contadorBanco = 0;
-            }
             
+  
             AtualizarContador();
           }
           if(botaoFuncEstado[0] == 0 && botaoFuncEstadoP[0] == 1 && flagBancoPreset == false ){
+            
+            ledBank[contadorBanco] = ledsByte;
             contadorBanco = contadorBanco +1;
             if(contadorBanco > nMaxBancos){
               contadorBanco = 0;
             }
+          
             AtualizarContador();
           }
            if(botaoFuncEstado[0] == 0 && botaoFuncEstadoP[0] == 1 && flagBancoPreset == true ){
+            
             contadorPreset = contadorPreset +1;
             if(contadorPreset > nMaxPreset){
               contadorPreset = 0;
