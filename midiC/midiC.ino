@@ -78,9 +78,12 @@ void loop() {
         if (millis() - botaoTempo[i] >= 1000) {  // se o botao for pressioando por mais que 1 segundo
          mandarPC_bt(midiBotaoPC[i], midiChannel);
          
-         // Serial.print("botao :");
-         // Serial.print(i);
-         // Serial.println(" segurado por 1 seg");
+         LimparLed_Flag();
+         ledsAtualizar();
+         
+          Serial.print("botao :");
+          Serial.print(i);
+         Serial.println(" segurado por 1 seg");
 
 
         }

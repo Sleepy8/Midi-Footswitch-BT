@@ -21,7 +21,7 @@ byte midiBotaoCC[nBotao] = {20, 30, 40, 50};
 const byte midiBotaoCC_Origi[nBotao] = {20, 30, 40, 50};
 
 byte midiBotaoPC[nBotao] = {20, 30, 40, 50};
-const byte notaBotaoPC_Origi[nBotao] = {20, 30, 40, 50};
+//const byte notaBotaoPC_Origi[nBotao] = {20, 30, 40, 50};
 
 byte botaoFlagMatriz[nMaxBancos + 1][nBotao] =
 {

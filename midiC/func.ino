@@ -14,6 +14,22 @@ void mandarPC_bt(byte midiNota, byte midiCanal) {
   bluetSerial.write(0xC0 + midiCanal);       // passa o byte de status midi como Program Change no canal 0
   bluetSerial.write(midiNota);   // passa o byte de data da nota midi desejada
 };
+void LimparLed_Flag(){
+    for (byte i = 0; i < nBotao; i++) { 
+        botaoFlag[i] = 1;
+        noteOnFlag[i] = 0; 
+        for(byte j = 0; j < nMaxBancos + 1; j++){
+          botaoFlagMatriz[i][j] = 1;
+          noteOnMatriz[i][j] = 0;
+
+        }
+      };
+    for(byte i = 0; i < nMaxBancos + 1; i ++){
+      ledBank[i] = 0b00000000;
+      ledsByte = 0b00000000;
+    };
+
+};
 void AtualizarContador() {
   switch (contadorBanco) {
     case 0:
@@ -28,7 +44,10 @@ void AtualizarContador() {
       bancoPresetSelecionado();
       ledsAtualizar();
       for (byte i = 0; i < nBotao; i++) {
-        midiBotaoCC[i] = midiBotaoCC_Origi[i] + 0;  // aumenta a nota CC botao em 1...
+       
+        midiBotaoCC[i] = midiBotaoCC_Origi[i] + 0; // aumenta a nota CC botao em 1...
+        midiBotaoPC[i] = midiBotaoCC[i];
+         
       }
       break;
     case 1:
@@ -44,6 +63,7 @@ void AtualizarContador() {
       ledsAtualizar();
       for (byte i = 0; i < nBotao; i++) {
         midiBotaoCC[i] = midiBotaoCC_Origi[i] + 1;
+        midiBotaoPC[i] = midiBotaoCC[i]; 
       }
       break;
     case 2:
@@ -54,11 +74,13 @@ void AtualizarContador() {
       };
       for (byte i = 0; i < nBotao; i++) {
         noteOnFlag[i] = noteOnMatriz[i][2];  // salva a flag botao na matriz
+
       };
       bancoPresetSelecionado();
       ledsAtualizar();
       for (byte i = 0; i < nBotao; i++) {
         midiBotaoCC[i] = midiBotaoCC_Origi[i] + 2;
+        midiBotaoPC[i] = midiBotaoCC[i];
       }
       break;
     case 3:
@@ -69,11 +91,13 @@ void AtualizarContador() {
       };
       for (byte i = 0; i < nBotao; i++) {
         noteOnFlag[i] = noteOnMatriz[i][3];  // salva a flag botao na matriz
+
       };
       bancoPresetSelecionado();
       ledsAtualizar();
       for (byte i = 0; i < nBotao; i++) {
         midiBotaoCC[i] = midiBotaoCC_Origi[i] + 3;
+        midiBotaoPC[i] = midiBotaoCC[i];
       }
       break;
     case 4:
@@ -89,6 +113,7 @@ void AtualizarContador() {
       ledsAtualizar();
       for (byte i = 0; i < nBotao; i++) {
         midiBotaoCC[i] = midiBotaoCC_Origi[i] + 4;
+        midiBotaoPC[i] = midiBotaoCC[i];
       }
       break;
     case 5:
@@ -104,7 +129,9 @@ void AtualizarContador() {
       ledsAtualizar();
       for (byte i = 0; i < nBotao; i++) {
         midiBotaoCC[i] = midiBotaoCC_Origi[i] + 5;
+        midiBotaoPC[i] = midiBotaoCC[i];
       }
+      
       break;
   };
 }
@@ -148,11 +175,11 @@ void bancoPresetSelecionado() {
     bitWrite(anodoByte, 7, 1);
     bitWrite(catodoByte, 7, 0);
 
-    ledsAtualizar();
+   // ledsAtualizar();
   } else {  //modo preset
     bitWrite(anodoByte, 7, 0);
     bitWrite(catodoByte, 7, 1);
     //catodoByte = numAnod[0];
-    ledsAtualizar();
+   // ledsAtualizar();
   }
 }
