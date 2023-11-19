@@ -14,6 +14,14 @@ void mandarPC_bt(byte midiNota, byte midiCanal) {
   bluetSerial.write(0xC0 + midiCanal);       // passa o byte de status midi como Program Change no canal 0
   bluetSerial.write(midiNota);   // passa o byte de data da nota midi desejada
 };
+void mandarCC_usb(byte channel, byte control, byte value) {
+  midiEventPacket_t event = {0x0B, 0xB0 | channel, control, value};
+  MidiUSB.sendMIDI(event);
+}
+void mandarPC_usb(byte channel, byte program) {
+  midiEventPacket_t pc = {0x0C, 0xC0 | channel, program, 0};
+  MidiUSB.sendMIDI(pc);
+}
 void LimparLed_Flag(){
     for (byte i = 0; i < nBotao; i++) { 
         botaoFlag[i] = 1;

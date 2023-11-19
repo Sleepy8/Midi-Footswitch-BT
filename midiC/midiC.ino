@@ -1,3 +1,4 @@
+#include <MIDIUSB.h>
 #include "def.h"
 #include <SoftwareSerial.h>
 
@@ -50,7 +51,12 @@ void loop() {
       bitWrite(ledsByte, 1, 0);
       bitWrite(ledsByte, 2, 0);
       ledsAtualizar();
-    };
+    } else if(battVida >= 99){
+      bitWrite(ledsByte, 0, 1);
+      bitWrite(ledsByte, 1, 1);
+      bitWrite(ledsByte, 2, 1);
+      ledsAtualizar();
+    }
     battTempo = millis();
     //Serial.println(analogRead(battPin));
   };
@@ -76,8 +82,10 @@ void loop() {
         }
       } else if (botaoEstado[i] == HIGH && botaoEstadoP[i] == LOW) {
         if (millis() - botaoTempo[i] >= 1000) {  // se o botao for pressioando por mais que 1 segundo
-         mandarPC_bt(midiBotaoPC[i], midiChannel);
          
+         mandarPC_usb(midiChannel, midiBotaoPC[i]);
+         MidiUSB.flush();
+         mandarPC_bt(midiBotaoPC[i], midiChannel);
          LimparLed_Flag();
          ledsAtualizar();
          
@@ -93,6 +101,8 @@ void loop() {
 
     if (botaoFlag[i] == 2 && noteOnFlag[i] == false) {  // quando a flag esta em 2 ou 1 faz coisas diferentes
       noteOnFlag[i] = true;
+      mandarCC_usb(midiChannel, midiBotaoCC[i], 0);
+      MidiUSB.flush();
       mandarCC_bt(midiBotaoCC[i], 0, midiChannel);
 
 
@@ -106,7 +116,11 @@ void loop() {
 
     } else if (botaoFlag[i] == 1 && noteOnFlag[i] == true) {
       noteOnFlag[i] = false;
+      mandarCC_usb(midiChannel, midiBotaoCC[i], 127);
+      MidiUSB.flush();
       mandarCC_bt(midiBotaoCC[i], 127, midiChannel);
+      
+      
       bitWrite(ledsByte, i + 3, 0);  //acende o led correspondente ao botao
       ledsAtualizar();
       Serial.print("notaOff:");
@@ -182,14 +196,16 @@ void loop() {
     potEstado[i] = analogRead(potPin[i]);            //le o estado de cada pino e armazena bna varaivel
     potMap[i] = map(potEstado[i], 0, 1023, 0, 127);  // mapeia o valor maximo e minimo para se adequar ao data midi
     int potVar = abs(potEstado[i] - potEstadoP[i]);  // armazena a variação do potenciometro
-    if (potVar > 40) {
+    if (potVar > 30) {
       tempoPerdidoPot[i] = millis();
     }
     potTempo[i] = millis() - tempoPerdidoPot[i];
     if (potTempo[i] > 300) {
       if (potMap[i] != potMapP[i]) {
+        mandarCC_usb(midiChannel, potMap[i], 127);
+        MidiUSB.flush();
         mandarCC_bt(notaPotCC[i], potMap[i], midiChannel);
-        Serial.println(potMap[i]);
+       // Serial.println(potMap[i]);
       }
     }
     potEstadoP[i] = potEstado[i];
