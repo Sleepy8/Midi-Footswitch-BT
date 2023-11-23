@@ -202,10 +202,12 @@ void loop() {
     potTempo[i] = millis() - tempoPerdidoPot[i];
     if (potTempo[i] > 300) {
       if (potMap[i] != potMapP[i]) {
-        mandarCC_usb(midiChannel, potMap[i], 127);
+        mandarCC_usb(midiChannel, notaPotCC[i], potMap[i]);
         MidiUSB.flush();
+        
         mandarCC_bt(notaPotCC[i], potMap[i], midiChannel);
        // Serial.println(potMap[i]);
+        
       }
     }
     potEstadoP[i] = potEstado[i];

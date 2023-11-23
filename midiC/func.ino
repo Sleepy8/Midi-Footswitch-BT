@@ -6,21 +6,29 @@ void ledsAtualizar() {
   digitalWrite(latchPin, HIGH);                                     // deixa o pino latch com estado logico alto para aplicar as mudanças
 }
 void mandarCC_bt(byte midiNota, byte midiForca, byte midiCanal) {
+  //if(bluetSerial.availableForWrite() > 0){
   bluetSerial.write(0xB0 + midiCanal);  // passa o byte de status midi como Control Change no canal 0
   bluetSerial.write(midiNota);          // passa o byte de data da nota midi desejada
   bluetSerial.write(midiForca);         // passa o byte de valor da força desejada ( 0 À 127
+ // }
 };
 void mandarPC_bt(byte midiNota, byte midiCanal) {
+ // if(bluetSerial.availableForWrite()){
   bluetSerial.write(0xC0 + midiCanal);       // passa o byte de status midi como Program Change no canal 0
   bluetSerial.write(midiNota);   // passa o byte de data da nota midi desejada
+ // };
 };
 void mandarCC_usb(byte channel, byte control, byte value) {
+  //if(MidiUSB.available()){
   midiEventPacket_t event = {0x0B, 0xB0 | channel, control, value};
   MidiUSB.sendMIDI(event);
+  //}
 }
 void mandarPC_usb(byte channel, byte program) {
+  // if(MidiUSB.available()){
   midiEventPacket_t pc = {0x0C, 0xC0 | channel, program, 0};
   MidiUSB.sendMIDI(pc);
+ //  }
 }
 void LimparLed_Flag(){
     for (byte i = 0; i < nBotao; i++) { 
