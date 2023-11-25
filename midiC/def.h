@@ -45,7 +45,7 @@ bool noteOnMatriz[nMaxBancos + 1][nBotao] =
 
 
 #define nBotaoFunc 2
-byte botaoFuncPin[nBotaoFunc] = {5,2};
+const byte botaoFuncPin[nBotaoFunc] = {5,2};
 bool botaoFuncEstado[nBotaoFunc];
 bool botaoFuncEstadoP[nBotaoFunc];
 unsigned long botaoFuncTempo[nBotaoFunc];
@@ -67,6 +67,8 @@ int potEstadoP[nPot];
 unsigned long  tempoPerdidoPot[nPot];
 byte notaPotCC[nPot] = {100, 120};
 byte notaPotCC_Origi[nPot] = {100, 120};
+
+//ResponsiveAnalogRead responsivePot[nPot] = {}; 
 
 
 #define dataPin 10

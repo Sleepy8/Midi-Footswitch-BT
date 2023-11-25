@@ -1,6 +1,7 @@
+//#include <ResponsiveAnalogRead.h>
 #include <MIDIUSB.h>
-#include "def.h"
 #include <SoftwareSerial.h>
+#include "def.h"
 
 
 SoftwareSerial bluetSerial(8, 9);
@@ -23,6 +24,13 @@ void setup() {
   for (byte i = 0; i < nBotaoFunc; i++) {
     pinMode(botaoFuncPin[i], INPUT_PULLUP);
   }
+
+  //for (int i = 0; i < nPot; i++) {
+    //responsivePot[i] = ResponsiveAnalogRead(0, true, 0.03);
+    //responsivePot[i].setAnalogResolution(1023);  // define a resolução
+  //}
+
+
   anodoByte = letraAnod[0];
   catodoByte = numAnod[0];
   bancoPresetSelecionado();
@@ -193,20 +201,27 @@ void loop() {
   //0------------------
   // -------------- pots -------------
   for (byte i = 0; i < nPot; i++) {
-    potEstado[i] = analogRead(potPin[i]);            //le o estado de cada pino e armazena bna varaivel
+    
+    
+    //responsivePot[i].update(analogRead(potPin[i]));
+
+    //potEstado[i] = responsivePot[i].getValue();
+    potEstado[i] = analogRead(potPin[i]);
+    
     potMap[i] = map(potEstado[i], 0, 1023, 0, 127);  // mapeia o valor maximo e minimo para se adequar ao data midi
+
     int potVar = abs(potEstado[i] - potEstadoP[i]);  // armazena a variação do potenciometro
     if (potVar > 30) {
       tempoPerdidoPot[i] = millis();
     }
     potTempo[i] = millis() - tempoPerdidoPot[i];
-    if (potTempo[i] > 300) {
+    if (potTempo[i] > 100) {
       if (potMap[i] != potMapP[i]) {
         mandarCC_usb(midiChannel, notaPotCC[i], potMap[i]);
         MidiUSB.flush();
         
         mandarCC_bt(notaPotCC[i], potMap[i], midiChannel);
-       // Serial.println(potMap[i]);
+        //Serial.println(potMap[i]);
         
       }
     }
