@@ -5,7 +5,7 @@
 
 
 SoftwareSerial bluetSerial(8, 9);
-ResponsiveAnalogRead ResponsiveBatt(battPin, TRUE);
+ResponsiveAnalogRead ResponsiveBatt(battPin, true, 0.02);
 
 
 
@@ -26,8 +26,8 @@ void setup() {
   }
 
   for (byte i = 0; i < nPot; i++) {
-    responsivePot[i] = ResponsiveAnalogRead(potPin[i], true);
-    //responsivePot[i].setAnalogResolution(1023);  // define a resolução
+    responsivePot[i] = ResponsiveAnalogRead(potPin[i], true, 0.02);
+    responsivePot[i].setAnalogResolution(1023);  // define a resolução
   };
 
 
@@ -40,7 +40,8 @@ void setup() {
 void loop() {
 
   // ---------- bateria ----
-  battEstado = analogRead(battPin);
+  ResponsiveBatt.update();
+  battEstado = ResponsiveBatt.getValue();
   battVida = map(battEstado, 614, 859, 0, 100);
   if (millis() - battTempo >= 1000) {
 
@@ -66,7 +67,7 @@ void loop() {
       ledsAtualizar();
     }
     battTempo = millis();
-    //Serial.println(analogRead(battPin));
+    Serial.println(battEstado);
   };
 
 
