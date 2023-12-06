@@ -65,10 +65,10 @@ unsigned long potTempo[nPot];
 int potEstado[nPot];
 int potEstadoP[nPot];
 unsigned long  tempoPerdidoPot[nPot];
-byte notaPotCC[nPot] = {100, 120};
-byte notaPotCC_Origi[nPot] = {100, 120};
+byte notaPotCC[nPot] = {80, 90};
+byte notaPotCC_Origi[nPot] = {80, 90};
 
-//ResponsiveAnalogRead responsivePot[nPot] = {}; 
+ResponsiveAnalogRead responsivePot[nPot] = {}; 
 
 
 #define dataPin 10
